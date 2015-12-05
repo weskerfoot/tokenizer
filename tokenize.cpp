@@ -117,6 +117,12 @@ pop_token(token_stream *tokens) {
   CHECK(tokens);
 
   len = tokens->length;
+  tok_t ttype = tokens->tokens[len].token_type;
+  if ((ttype != QUOTE) &&
+      (ttype != WSPACE) &&
+      (ttype != EMPTY)) {
+    free_token(tokens->tokens[len], ttype);
+  }
 
   assert(len != 0);
   len--;
@@ -423,11 +429,27 @@ tokenize(source_t source,
 }
 
 int
-free_token( void *key,
-            void *val) {
+free_token(token_t val,
+           tok_t ttype) {
   /* silence warnings about unused parameters, key and val point to the same data*/
-  (void)key;
-  free((char *)val);
+  switch (ttype) {
+    case SYMBOL:
+      free((void *)val.token.symbol);
+      break;
+    case IDENTIFIER:
+      free((void *)val.token.identifier);
+      break;
+    case INTEGER:
+      free((void *)val.token.integer);
+      break;
+    case FLOATING:
+      free((void *)val.token.floating);
+      break;
+    case QUOTE:
+      free((void *)val.token.string);
+      break;
+    default: return true;
+  }
   return true;
 }
 
