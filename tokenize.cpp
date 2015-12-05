@@ -10,8 +10,8 @@
 #include "tokenize.h"
 
 /*
- * This is a basic s-expression tokenizer
- * it also tokenizes things like number, string, and symbol literals
+ * This is a basic expression tokenizer
+ * it tokenizes things like numbers, string, and symbol literals
  */
 
 token_t nulltok;
